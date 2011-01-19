@@ -1,42 +1,57 @@
-== License ==
+License
+=======
 This code is licensed under the MIT license
 This code is based on a implementation by Nick Garvish, found on http://nick.vargish.org/clues/python-tricks.html
 
-==Simple Signal Watchdog==
+
+Simple Signal Watchdog
+----------------------
 
 Provides a simple UNIX-signal based watchdog. It may be used either as a context manager
 or as a decorator. The default behaviour is to raise a Timeout exception when the
 given number of seconds has passed.
 
-== Usage ==
-=== Decorator usage ===
+Usage
+=====
 
->>> @watchdog(3)
->>> def nii(delay):
+Decorator usage
+---------------
+
+	>>> @watchdog(3)
+	>>> def nii(delay):
 	...   time.sleep(delay);
 	...
+
 	>>> nii(2);          # will pass successfully
 	>>> nii(3);          # will pass successfully
 	>>> nii(4);
-	(throws Timeout after 3 seconds)
+	[...]
+	watchdog.Timeout: Execution timed out (limit was 3 seconds)
 
-=== Context Manager usage ===
->>> with watchdog(5):
+Context Manager usage
+---------------------
+	>>> with watchdog(5):
 	...   time.sleep(10);
-	(throws Timeout after 5 seconds)
+	watchdog.Timeout: Execution timed out (limit was 5 seconds)
 
-== Analysis ==
+Remarks
+=======
 
-=== Portability ===
+Portability
+-----------
+
 This implementation is based on UNIX signals and, as such, should not work on non-
 unix platforms (e.g. Windows).
 
-=== Advantages ===
+Advantages
+----------
+
 This implementation is simpler than using threads. Also, unlike a thread-based
 implementation, it manages to raise an exception in the same context as the calling
 code.
 
-=== Disavantadges ===
+Disavantadges
+-------------
 It is less capable than a thread-based watchdog implementation, in that its timeout
 granularity is seconds.
 
